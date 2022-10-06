@@ -1,9 +1,7 @@
-import io
-import numpy as np
 import torch.onnx
-from model import my_resnet
+from model import resnet_34
 
-torch_model = my_resnet()
+torch_model = resnet_34()
 model_path = "model_weights.pth"
 batch_size = 1
 

@@ -1,21 +1,22 @@
+import numpy as np
 from torch import nn
 
 from dataset import Covid_dataset
 from torch.utils.data import DataLoader
 import torch
-from model import my_resnet
+from model import resnet_50
 import torchvision.transforms as trans
 
 mytransformer = trans.Resize([224,224])
 # prepare both datasets
 
-whole_dataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/non_covid.csv",
-                              "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/covid.csv",
-                              "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/all_image_resized",
-
+whole_dataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/non_covid.csv",
+                              "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/covid.csv",
+                              "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/all_image_resized",
                               )
+plot_loss = []
 training_ratio = 0.8
-batch_size = 64
+batch_size = 16
 epochs = 50
 train_data, test_data = torch.utils.data.random_split(whole_dataset, [int(len(whole_dataset) * training_ratio),
                                                                       len(whole_dataset)-int(len(whole_dataset) * training_ratio)])
@@ -30,12 +31,13 @@ for X, y in test_dataloader:
 #prepare the model
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
-model = my_resnet().to(device)
-print(model)
+model_res50 = resnet_50().to(device)
+#model_vgg = VGG_16().to(device)
+print(model_res50)
 
 #define train and test function
 loss_fn = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+optimizer = torch.optim.Adam(model_res50.parameters(), lr=1e-3)
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     model.train()
@@ -71,10 +73,16 @@ def test(dataloader, model, loss_fn):
     test_loss /= num_batches
     correct /= size
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    plot_loss.append(test_loss)
 
+
+test(test_dataloader, model_res50, loss_fn)
+test(train_dataloader, model_res50, loss_fn)
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
-    train(train_dataloader, model, loss_fn, optimizer)
-    test(test_dataloader, model, loss_fn)
+    train(train_dataloader, model_res50, loss_fn, optimizer)
+    test(test_dataloader, model_res50, loss_fn)
+    test(train_dataloader, model_res50, loss_fn)
+    torch.save(model_res50, './weights/res18/{}.pth'.format(t))
 print("Done!")
-torch.save(model.state_dict(), 'model_weights.pth')
+np.save("./loss/res50.npy",plot_loss)

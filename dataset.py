@@ -17,6 +17,7 @@ class Covid_dataset(Dataset):
         return len(self.covid) + len(self.non_covid)
 
     def __getitem__(self, idx):
+        #未感染新冠的为0
         label = 0
         if (idx >= self.non_covid_size):
             label = 1
@@ -31,8 +32,8 @@ class Covid_dataset(Dataset):
 
         return image, label
 
-# mydataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/non_covid.csv",
-#                           "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/covid.csv",
-#                           "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/all_image")
+# mydataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/non_covid.csv",
+#                           "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/covid.csv",
+#                           "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/all_image")
 # train_data, test_data = torch.utils.data.random_split(mydataset, [397,349])
 # print(test_data)
