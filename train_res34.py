@@ -9,9 +9,9 @@ import torchvision.transforms as trans
 mytransformer = trans.Resize([224,224])
 # prepare both datasets
 
-whole_dataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/non_covid.csv",
-                              "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/Data-split/covid.csv",
-                              "/home/jas0n/PycharmProjects/covid_ct_torch/COVID-CT/all_image_resized",
+whole_dataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/non_covid.csv",
+                              "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Data-split/covid.csv",
+                              "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/all_image_resized",
                               )
 plot_loss =[]
 training_ratio = 0.8

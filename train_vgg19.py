@@ -14,7 +14,7 @@ whole_dataset = Covid_dataset("/home/jas0n/PycharmProjects/covid_ct/COVID-CT/Dat
                               "/home/jas0n/PycharmProjects/covid_ct/COVID-CT/all_image_resized",
                               )
 training_ratio = 0.8
-batch_size = 16
+batch_size = 12
 epochs = 50
 train_data, test_data = torch.utils.data.random_split(whole_dataset, [int(len(whole_dataset) * training_ratio),
                                                                       len(whole_dataset)-int(len(whole_dataset) * training_ratio)])

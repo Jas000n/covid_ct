@@ -83,6 +83,6 @@ for t in range(epochs):
     train(train_dataloader, model_res50, loss_fn, optimizer)
     test(test_dataloader, model_res50, loss_fn)
     test(train_dataloader, model_res50, loss_fn)
-    torch.save(model_res50, './weights/res18/{}.pth'.format(t))
+    torch.save(model_res50, './weights/res50/{}.pth'.format(t))
 print("Done!")
 np.save("./loss/res50.npy",plot_loss)
